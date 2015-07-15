@@ -37,7 +37,8 @@ class UserDetail(Endpoint):
             'modification',
         ])
 
-        friends = Friend.objects.filter(Q(id_user__id=pk) | Q(id_owner__id=pk))
+        # for f in Friend.objects.filter(Q(id_user__id=pk) | Q(id_owner__id=pk)):
+        #     pass
         user['socials'] = {s.name:s.link for s in SocialNetwork.objects.filter(user__id=pk)}
         return user
 
