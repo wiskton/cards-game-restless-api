@@ -17,13 +17,20 @@ from django.conf.urls import include, url
 from django.contrib import admin
 import restless
 
-from users.views import UserList, UserDetail
+from users.views import UserList, UserDetail, FriendList, FriendDetail, SocialNetworkList, SocialNetworkDetail
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^login/$', restless.auth.AuthenticateEndpoint.as_view()),
     url(r'^users/$', UserList.as_view(), name='user_list'),
     url(r'^users/(?P<pk>\d+)$', UserDetail.as_view(), name='user_detail'),
+
+    url(r'^friends/$', FriendList.as_view(), name='friend_list'),
+    url(r'^friends/(?P<pk>\d+)$', FriendDetail.as_view(), name='friend_detail'),
+
+
+    url(r'^socialnetworks/$', SocialNetworkList.as_view(), name='socialnetwork_list'),
+    url(r'^socialnetworks/(?P<pk>\d+)$', SocialNetworkDetail.as_view(), name='socialnetwork_detail'),
 
     # url(r'^friends/(?P<id_user>\d+)$', FriendList.as_view(), name='friend_list'),
     # url(r'^social-networks/(?P<id_user>\d+)$', SocialNetworksList.as_view(), name='social_networks_list'),

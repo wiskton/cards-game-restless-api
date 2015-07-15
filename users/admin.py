@@ -14,3 +14,15 @@ class UserAdmin(admin.ModelAdmin):
     
 
 admin.site.register(User, UserAdmin)
+
+class FriendAdmin(admin.ModelAdmin):
+    pass
+    
+
+admin.site.register(Friend, FriendAdmin)
+
+class SocialNetworkAdmin(admin.ModelAdmin):
+    pass
+    
+
+admin.site.register(SocialNetwork, SocialNetworkAdmin)

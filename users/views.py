@@ -1,7 +1,9 @@
 # from restless.auth import BasicHttpAuthMixin, login_required
 from restless.modelviews import ListEndpoint, DetailEndpoint
-# from restless.views import Endpoint
+from restless.views import Endpoint
 from models import User, SocialNetwork, Friend
+from restless.models import serialize
+from django.db.models import Q
 
 # class SecretGreeting(Endpoint, BasicHttpAuthMixin):
 #     @login_required
@@ -11,15 +13,42 @@ from models import User, SocialNetwork, Friend
 class UserList(ListEndpoint):
     model = User
 
-class UserDetail(DetailEndpoint):
-    model = User
+class UserDetail(Endpoint):
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk)
 
-# class FriendList(Endpoint):
-#     def get(self, request, id_user):
-#         friend = Friend.objects.get(pk=id_user)
-#         return serialize(user, exclude=['password'])
+        user = serialize(user, fields=[
+            'email',
+            'name',
+            'surname',
+            'profession',
+            'company',
+            'avatar',
+            'cover',
+            'phone_number_1',
+            'phone_number_1_carrier',
+            'phone_number_2',
+            'phone_number_2_carrier',
+            'website',
+            'street',
+            'neightborhood',
+            'city_state',
+            'creation',
+            'modification',
+        ])
 
-# class SocialNetworksList(Endpoint):
-#     def get(self, request, id_user):
-#         socialNetwork = SocialNetwork.objects.get(pk=id_user)
-#         return serialize(socialNetwork, exclude=['password'])
+        friends = Friend.objects.filter(Q(id_user__id=pk) | Q(id_owner__id=pk))
+        user['socials'] = {s.name:s.link for s in SocialNetwork.objects.filter(user__id=pk)}
+        return user
+
+class SocialNetworkList(ListEndpoint):
+    model = SocialNetwork
+
+class SocialNetworkDetail(DetailEndpoint):
+    model = SocialNetwork
+
+class FriendList(ListEndpoint):
+    model = Friend
+
+class FriendDetail(DetailEndpoint):
+    model = Friend
