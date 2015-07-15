@@ -39,7 +39,7 @@ def deploy():
     remote_pull()
     # compress()
     # compass_compile()
-    collectstatic()
+    # collectstatic()
     remote_migrate_all()
     # remote_test()
     restart()
