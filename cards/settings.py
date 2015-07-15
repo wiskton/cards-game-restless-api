@@ -12,9 +12,23 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# -------------------------------------------------------------
+# SITE
+# -------------------------------------------------------------
 
+DOMINIO = 'cards.willemallan.com.br'
+
+# -------------------------------------------------------------
+# EMAIL
+# -------------------------------------------------------------
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = "contato@willemallan.com.br"
+EMAIL_HOST_PASSWORD = "a1b2c3d4"
+EMAIL_USE_TLS = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -39,6 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'restless',
     'gunicorn',
+    'home',
     'users',
 )
 
@@ -102,4 +117,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+# -------------------------------------------------------------
+# MEDIA, STATIC E TEMPLATES
+# -------------------------------------------------------------
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'http://media.%s/' % DOMINIO
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = 'http://static.%s/' % DOMINIO
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'cards/static'),
+)
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+# -------------------------------------------------------------
+# LOCAL SETTINGS
+# -------------------------------------------------------------
+
+try:
+    from local_settings import *
+except ImportError:
+    print 'local_settings.py not found'

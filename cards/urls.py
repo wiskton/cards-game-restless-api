@@ -16,11 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 import restless
-
+from django.views.generic import TemplateView
 from users.views import UserList, UserDetail, FriendList, FriendDetail, SocialNetworkList, SocialNetworkDetail
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    
+    url(r'^$', 'home.views.home', name='home'),
+
     # url(r'^login/$', restless.auth.AuthenticateEndpoint.as_view()),
     url(r'^users/$', UserList.as_view(), name='user_list'),
     url(r'^users/(?P<pk>\d+)$', UserDetail.as_view(), name='user_detail'),
