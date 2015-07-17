@@ -46,3 +46,4 @@ celerybeat-schedule
 
 cards/local_settings.py
 db
+db.sqlite3
