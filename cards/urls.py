@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 import restless
 from django.views.generic import TemplateView
-from users.views import UserList, UserDetail, FriendList, FriendDetail, SocialNetworkList, SocialNetworkDetail
+from users.views import UserList, UserDetail, FriendList, SocialNetworkList, SocialNetworkDetail
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^users/(?P<pk>\d+)$', UserDetail.as_view(), name='user_detail'),
 
     url(r'^friends/$', FriendList.as_view(), name='friend_list'),
-    url(r'^friends/(?P<pk>\d+)$', FriendDetail.as_view(), name='friend_detail'),
+    # url(r'^friends/update/$', FriendDetail.as_view(), name='friend_detail'),
 
 
     url(r'^socialnetworks/$', SocialNetworkList.as_view(), name='socialnetwork_list'),

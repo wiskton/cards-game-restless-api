@@ -50,7 +50,6 @@ class UserDetail(Endpoint):
         user['socials'] = {s.name:s.link for s in SocialNetwork.objects.filter(user__id=pk)}
         return user
 
-
 class SocialNetworkList(ListEndpoint):
     model = SocialNetwork            
 
@@ -64,8 +63,21 @@ class FriendList(ListEndpoint):
           
         id_owner = User.objects.get(id=request.data['id_owner'])
         id_user = User.objects.get(id=request.data['id_user'])
-        friend = Friend.objects.create(id_owner=id_owner, id_user=id_user)
+        friend = Friend.objects.filter(id_owner=id_owner, id_user=id_user).first()
+        if not friend:
+            friend = Friend.objects.create(id_owner=id_owner, id_user=id_user)
+        else:
+            if int(request.data['active']) == 1:
+                friend.active = True
+            else:
+                friend.active = False
+            friend.save()
         return Http201(self.serialize(friend))
 
-class FriendDetail(DetailEndpoint):
-    model = Friend
+# class FriendDetail(Endpoint):
+#     def post(self, request, *args, **kwargs):
+#         id_owner = User.objects.get(id=request.data['id_owner'])
+#         id_user = User.objects.get(id=request.data['id_user'])
+#         friend = Friend.objects.filter(id_owner=id_owner, id_user=id_user).first()
+        
+#         return Http201('success')
