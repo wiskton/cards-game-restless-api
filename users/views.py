@@ -12,12 +12,23 @@ from restless.auth import BasicHttpAuthMixin, login_required
 #     def get(self, request):
 #         return {'message': 'Hello, %s!' % request.user}
 
+TOKEN = "x33S86vYEWt6KEWfMmEALLNc"
+
+def get_token(request):
+    # print "################################"
+    # print "%s" % request.META.get('HTTP_TOKEN')
+    # print "################################"
+    if request.META.get('HTTP_TOKEN') != TOKEN:
+        raise HttpError(400, 'TOKEN IS INVALID!')
+
 class UserList(ListEndpoint):
     model = User
 
 class UserDetail(Endpoint):
-    # @login_required
+
     def get(self, request, pk):
+        get_token(request)
+
         user = User.objects.get(pk=pk)
 
         user = serialize(user, fields=[
@@ -57,7 +68,9 @@ class SocialNetworkDetail(DetailEndpoint):
     model = SocialNetwork
 
 class FriendList(ListEndpoint):
+        
     def post(self, request, *args, **kwargs):
+        get_token(request)
         if 'POST' not in self.methods:
             raise HttpError(405, 'Method Not Allowed')
           
@@ -73,11 +86,3 @@ class FriendList(ListEndpoint):
                 friend.active = False
             friend.save()
         return Http201(self.serialize(friend))
-
-# class FriendDetail(Endpoint):
-#     def post(self, request, *args, **kwargs):
-#         id_owner = User.objects.get(id=request.data['id_owner'])
-#         id_user = User.objects.get(id=request.data['id_user'])
-#         friend = Friend.objects.filter(id_owner=id_owner, id_user=id_user).first()
-        
-#         return Http201('success')
